@@ -17,7 +17,6 @@ export default function App() {
 
   const addTodo = async (newTodo) => {
     const value = { text: newTodo };
-    console.log('🚀 ~ addTodo ~ value:', value);
     try {
       await createTodo({ text: newTodo });
       await fetchTodos();
