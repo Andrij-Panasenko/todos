@@ -6,7 +6,7 @@ export const getAllTodos = async () => {
 
     return response.data;
   } catch (error) {
-    console.error('Error getting todos', eddod);
+    console.error('Error getting todos', error);
     throw error;
   }
 };

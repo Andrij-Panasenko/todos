@@ -4,7 +4,7 @@ export const TodoItem = ({ todo, onDelete }) => {
   return (
     <li>
       <p>{todo.text}</p>
-      <button onClick={() => onDelete(todo.id)}>Delete</button>
+      <button onClick={() => onDelete(todo._id)}>Delete</button>
     </li>
   );
 };

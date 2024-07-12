@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AddTodoFrom } from './AddTodoForm';
 import { TodoItem } from './TodoItem';
 import { getAllTodos } from './api';
+import { deleteTodo } from './api/deleteTodo';
 
 export default function App() {
   const [todos, setTodos] = useState([]);
@@ -9,7 +10,6 @@ export default function App() {
   useEffect(() => {
     const fetchTodos = async () => {
       const data = await getAllTodos();
-      console.log("🚀 ~ fetchTodos ~ data:", data)
       setTodos(data);
     };
     fetchTodos();
@@ -20,9 +20,13 @@ export default function App() {
     setTodos([...todos, newTodo]);
   };
 
-  const deleteTodo = (id) => {
-    const newTodo = todos.filter((todo) => todo.id !== id);
-    setTodos(newTodo);
+  const handleDeleteTodo = async (id) => {
+    try {
+      await deleteTodo(id);
+      setTodos((prev) => prev.filter((todo) => todo._id !== id));
+    } catch (error) {
+      console.error('Error deleting todo', error);
+    }
   };
 
   return (
@@ -32,7 +36,11 @@ export default function App() {
         <AddTodoFrom onAdd={addTodo} />
         <ul>
           {todos.map((todo) => (
-            <TodoItem key={todo._id} todo={todo} onDelete={deleteTodo} />
+            <TodoItem
+              key={todo._id}
+              todo={todo}
+              onDelete={() => handleDeleteTodo(todo._id)}
+            />
           ))}
         </ul>
       </div>
