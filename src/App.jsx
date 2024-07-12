@@ -1,23 +1,29 @@
 import { useEffect, useState } from 'react';
 import { AddTodoFrom } from './AddTodoForm';
 import { TodoItem } from './TodoItem';
-import { getAllTodos } from './api';
-import { deleteTodo } from './api/deleteTodo';
+import { getAllTodos, deleteTodo, createTodo } from './api';
 
 export default function App() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      const data = await getAllTodos();
-      setTodos(data);
-    };
     fetchTodos();
   }, []);
 
-  const addTodo = (text) => {
-    const newTodo = { id: Date.now(), text };
-    setTodos([...todos, newTodo]);
+  const fetchTodos = async () => {
+    const data = await getAllTodos();
+    setTodos(data);
+  };
+
+  const addTodo = async (newTodo) => {
+    const value = { text: newTodo };
+    console.log('🚀 ~ addTodo ~ value:', value);
+    try {
+      await createTodo({ text: newTodo });
+      await fetchTodos();
+    } catch (error) {
+      console.error('Error creating todo', error);
+    }
   };
 
   const handleDeleteTodo = async (id) => {
